@@ -23,7 +23,7 @@ func cloneImage(platform manifest.Platform) string {
 	case "windows":
 		return "drone/git:latest"
 	default:
-		return "drone/git:latest"
+		return "loongcr.lcpu.dev/drone/git:latest"
 	}
 }
 
