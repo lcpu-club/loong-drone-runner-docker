@@ -5,19 +5,11 @@ type: docker
 steps:
   - name: build
     image: loongcr.lcpu.dev/lcpu/archlinux:base
-    volumes:
-    - name: dockersock
-      path: /var/run/docker.sock
     environment:
       DOCKER_PASSWORD:
         from_secret: docker_password
     commands:
-    - pacman -Sy --noconfirm && pacman -S --noconfirm docker
-    - docker build -t loongcr.lcpu.dev/drone/drone-runner-docker:latest -f ./docker/Dockerfile.linux.loong64 .
-    - docker login -u="\$app" -p="$DOCKER_PASSWORD" loongcr.lcpu.dev
-    - docker push loongcr.lcpu.dev/drone/drone-runner-docker:latest
-
-volumes:
-- name: dockersock
-  host:
-    path: /var/run/docker.sock
+    - pacman -Sy --noconfirm && pacman -S --noconfirm podman
+    - podman build -t loongcr.lcpu.dev/drone/drone-runner-docker:latest -f ./docker/Dockerfile.linux.loong64 .
+    - podman login -u="\$app" -p="$DOCKER_PASSWORD" loongcr.lcpu.dev
+    - podman push loongcr.lcpu.dev/drone/drone-runner-docker:latest
