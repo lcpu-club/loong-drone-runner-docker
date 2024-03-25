@@ -17,7 +17,8 @@ steps:
     - docker build -t loongcr.lcpu.dev/drone/drone-runner-docker:latest -f ./docker/Dockerfile.linux.loong64 .
     - docker login -u="\$app" -p="$DOCKER_PASSWORD" loongcr.lcpu.dev
     - docker push loongcr.lcpu.dev/drone/drone-runner-docker:latest
-
+    node:
+      size: small
 volumes:
 - name: dockersock
   host:
