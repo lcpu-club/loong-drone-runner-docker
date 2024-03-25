@@ -11,6 +11,7 @@ steps:
     environment:
       DOCKER_PASSWORD:
         from_secret: docker_password
+      DOCKER_HOST: unix:///run/user/1001/docker.sock
     commands:
     - pacman -Sy --noconfirm && pacman -S --noconfirm docker
     - docker build -t loongcr.lcpu.dev/drone/drone-runner-docker:latest -f ./docker/Dockerfile.linux.loong64 .
