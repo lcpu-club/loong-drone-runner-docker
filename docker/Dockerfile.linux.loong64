@@ -1,0 +1,23 @@
+FROM loongcr.lcpu.dev/lcpu/archlinux:base-devel as build
+
+ENV GOPATH=""
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=loong64
+
+RUN pacman -Syyu && pacman -S --noconfirm --needed msgpack-c libssh util-linux-libs base-devel go git automake autoconf libtool wget
+
+RUN wget "https://github.com/tmate-io/tmate/archive/refs/tags/2.4.0.tar.gz" && tar -xvf 2.4.0.tar.gz && cd tmate-2.4.0 && cp -f /usr/share/automake-1.16/config.sub . && cp -f /usr/share/automake-1.16/config.guess . && autoupdate && ./autogen.sh \
+ && ./configure && make -j4 && cp tmate /usr/bin/tmate
+
+RUN rm -rf /tmp/* && cd /tmp && git clone https://github.com/lcpu-club/loong-drone-runner-docker.git && cd loong-drone-runner-docker && go get -u &&  go mod tidy && go build -o /usr/bin/drone-runner-docker
+
+FROM loongcr.lcpu.dev/lcpu/archlinux:base
+
+RUN mkdir -p /etc/docker
+
+COPY daemon.json /etc/docker/daemon.json
+COPY --from=build /usr/bin/tmate /usr/bin/tmate
+COPY --from=build /usr/bin/drone-runner-docker /usr/bin/drone-runner-docker
+
+CMD ["/usr/bin/drone-runner-docker"]
