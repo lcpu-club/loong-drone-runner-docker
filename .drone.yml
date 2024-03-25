@@ -13,7 +13,7 @@ steps:
         from_secret: docker_password
     commands:
     - pacman -S --noconfirm docker
-    - docker build -t loongcr.lcpu.dev/repository/drone/drone-runner-docker:latest ./docker/Dockerfile.linux.loong64
+    - docker build -t loongcr.lcpu.dev/repository/drone/drone-runner-docker:latest -f ./docker/Dockerfile.linux.loong64 .
     - docker login -u="\$app" -p="$DOCKER_PASSWORD" loongcr.lcpu.dev
     - docker push loongcr.lcpu.dev/repository/drone/drone-runner-docker:latest
 
