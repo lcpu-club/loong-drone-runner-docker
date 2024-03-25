@@ -5,7 +5,7 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=loong64
 
-RUN pacman -Syyu && pacman -S --noconfirm --needed msgpack-c libssh util-linux-libs base-devel go git automake autoconf libtool wget
+RUN pacman -Syyu --noconfirm && pacman -S --noconfirm --needed msgpack-c libssh util-linux-libs base-devel go git automake autoconf libtool wget
 
 RUN wget "https://github.com/tmate-io/tmate/archive/refs/tags/2.4.0.tar.gz" && tar -xvf 2.4.0.tar.gz && cd tmate-2.4.0 && cp -f /usr/share/automake-1.16/config.sub . && cp -f /usr/share/automake-1.16/config.guess . && autoupdate && ./autogen.sh \
  && ./configure && make -j4 && cp tmate /usr/bin/tmate
